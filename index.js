@@ -34,15 +34,6 @@ const copyTextFromTextArea = async ({ areaId, document, clipboard, alert }) => {
   return true;
 };
 
-// if (typeof module !== "undefined" && module.exports) {
-//   module.exports = {
-//     calculateFunctionPosition,
-//     copyTextFromTextArea,
-//     INPUT_FONT_SIZE_BPMF,
-//     INPUT_FONT_SIZE_DEFAULT,
-//   };
-// }
-
 if (typeof document !== "undefined") {
   (() => {
     window.copy_text = (areaId) =>
@@ -121,12 +112,103 @@ if (typeof document !== "undefined") {
       focusElement(inputId);
       return output;
     };
+    const readTextFile = (file) =>
+      new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(String(reader.result || ""));
+        reader.onerror = () => reject(reader.error);
+        reader.readAsText(file, "utf-8");
+      });
+    const syntaxHighlightManager = (() => {
+      const that = {};
+      const fields = new Map();
+
+      const getRenderer = () => window.phraseSyntaxHighlighter;
+
+      const syncScroll = (textarea, backdrop) => {
+        backdrop.scrollTop = textarea.scrollTop;
+        backdrop.scrollLeft = textarea.scrollLeft;
+      };
+
+      const renderField = (id) => {
+        const field = fields.get(id);
+        const renderer = getRenderer();
+        if (!field || !renderer) {
+          return;
+        }
+
+        field.content.innerHTML = renderer.renderHtml(field.textarea.value) + "\n";
+        syncScroll(field.textarea, field.backdrop);
+      };
+
+      const attach = (id, options = {}) => {
+        const renderer = getRenderer();
+        const textarea = $(id);
+        if (!renderer || !textarea || fields.has(id)) {
+          return;
+        }
+
+        const wrapper = document.createElement("div");
+        wrapper.className = "syntax-highlight-field";
+        if (options.fill) {
+          wrapper.classList.add("syntax-highlight-field--fill");
+          textarea.style.height = "100%";
+        }
+        if (options.tall) {
+          wrapper.classList.add("syntax-highlight-field--tall");
+          textarea.style.height = "100%";
+        }
+
+        textarea.parentNode.insertBefore(wrapper, textarea);
+        wrapper.appendChild(textarea);
+
+        const backdrop = document.createElement("div");
+        backdrop.className = "syntax-highlight-backdrop";
+        const content = document.createElement("pre");
+        content.className = "syntax-highlight-content";
+        backdrop.appendChild(content);
+        wrapper.appendChild(backdrop);
+
+        const computedStyle = window.getComputedStyle(textarea);
+        backdrop.style.font = computedStyle.font;
+        backdrop.style.letterSpacing = computedStyle.letterSpacing;
+        content.style.font = computedStyle.font;
+        content.style.lineHeight = computedStyle.lineHeight;
+        content.style.letterSpacing = computedStyle.letterSpacing;
+
+        textarea.classList.add("syntax-highlight-input");
+        textarea.addEventListener("input", () => renderField(id));
+        textarea.addEventListener("scroll", () => syncScroll(textarea, backdrop));
+
+        fields.set(id, {
+          textarea,
+          backdrop,
+          content,
+        });
+        renderField(id);
+      };
+
+      that.init = () => {
+        attach("feature_user_phrases_text_area", { tall: true });
+        attach("feature_excluded_phrases_text_area", { tall: true });
+        attach("phrase_generate_output", { fill: true });
+      };
+
+      that.refresh = (id) => renderField(id);
+      that.refreshAll = () => {
+        for (const id of fields.keys()) {
+          renderField(id);
+        }
+      };
+
+      return that;
+    })();
 
     const ui = (() => {
       const that = {};
       that.beep = () => {
         const snd = new Audio(
-          "data:audio/wav;base64,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qJrx4KOQjahZxWbcZgztj2c49nKmkId44S71j0c8eV9yDK6uPRzx5X18eDvjvQ6yKo9ZSS6l//8elePK/Lf//IInrOF/FvDoADYAGBMGb7FtErm5MXMlmPAJQVgWta7Zx2go+8xJ0UiCb8LHHdftWyLJE0QIAIsI+UbXu67dZMjmgDGCGl1H+vpF4NSDckSIkk7Vd+sxEhBQMRU8j/12UIRhzSaUdQ+rQU5kGeFxm+hb1oh6pWWmv3uvmReDl0UnvtapVaIzo1jZbf/pD6ElLqSX+rUmOQNpJFa/r+sa4e/pBlAABoAAAAA3CUgShLdGIxsY7AUABPRrgCABdDuQ5GC7DqPQCgbbJUAoRSUj+NIEig0YfyWUho1VBBBA//uQZB4ABZx5zfMakeAAAAmwAAAAF5F3P0w9GtAAACfAAAAAwLhMDmAYWMgVEG1U0FIGCBgXBXAtfMH10000EEEEEECUBYln03TTTdNBDZopopYvrTTdNa325mImNg3TTPV9q3pmY0xoO6bv3r00y+IDGid/9aaaZTGMuj9mpu9Mpio1dXrr5HERTZSmqU36A3CumzN/9Robv/Xx4v9ijkSRSNLQhAWumap82WRSBUqXStV/YcS+XVLnSS+WLDroqArFkMEsAS+eWmrUzrO0oEmE40RlMZ5+ODIkAyKAGUwZ3mVKmcamcJnMW26MRPgUw6j+LkhyHGVGYjSUUKNpuJUQoOIAyDvEyG8S5yfK6dhZc0Tx1KI/gviKL6qvvFs1+bWtaz58uUNnryq6kt5RzOCkPWlVqVX2a/EEBUdU1KrXLf40GoiiFXK///qpoiDXrOgqDR38JB0bw7SoL+ZB9o1RCkQjQ2CBYZKd/+VJxZRRZlqSkKiws0WFxUyCwsKiMy7hUVFhIaCrNQsKkTIsLivwKKigsj8XYlwt/WKi2N4d//uQRCSAAjURNIHpMZBGYiaQPSYyAAABLAAAAAAAACWAAAAApUF/Mg+0aohSIRobBAsMlO//Kk4soosy1JSFRYWaLC4qZBYWFRGZdwqKiwkNBVmoWFSJkWFxX4FFRQWR+LsS4W/rFRb/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////VEFHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAU291bmRib3kuZGUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMjAwNGh0dHA6Ly93d3cuc291bmRib3kuZGUAAAAAAAAAACU="
+          "data:audio/wav;base64,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qJrx4KOQjahZxWbcZgztj2c49nKmkId44S71j0c8eV9yDK6uPRzx5X18eDvjvQ6yKo9ZSS6l//8elePK/Lf//IInrOF/FvDoADYAGBMGb7FtErm5MXMlmPAJQVgWta7Zx2go+8xJ0UiCb8LHHdftWyLJE0QIAIsI+UbXu67dZMjmgDGCGl1H+vpF4NSDckSIkk7Vd+sxEhBQMRU8j/12UIRhzSaUdQ+rQU5kGeFxm+hb1oh6pWWmv3uvmReDl0UnvtapVaIzo1jZbf/pD6ElLqSX+rUmOQNpJFa/r+sa4e/pBlAABoAAAAA3CUgShLdGIxsY7AUABPRrgCABdDuQ5GC7DqPQCgbbJUAoRSUj+NIEig0YfyWUho1VBBBA//uQZB4ABZx5zfMakeAAAAmwAAAAF5F3P0w9GtAAACfAAAAAwLhMDmAYWMgVEG1U0FIGCBgXBXAtfMH10000EEEEEECUBYln03TTTdNBDZopopYvrTTdNa325mImNg3TTPV9q3pmY0xoO6bv3r00y+IDGid/9aaaZTGMuj9mpu9Mpio1dXrr5HERTZSmqU36A3CumzN/9Robv/Xx4v9ijkSRSNLQhAWumap82WRSBUqXStV/YcS+XVLnSS+WLDroqArFkMEsAS+eWmrUzrO0oEmE40RlMZ5+ODIkAyKAGUwZ3mVKmcamcJnMW26MRPgUw6j+LkhyHGVGYjSUUKNpuJUQoOIAyDvEyG8S5yfK6dhZc0Tx1KI/gviKL6qvvFs1+bWtaz58uUNnryq6kt5RzOCkPWlVqVX2a/EEBUdU1KrXLf40GoiiFXK///qpoiDXrOgqDR38JB0bw7SoL+ZB9o1RCkQjQ2CBYZKd/+VJxZRRZlqSkKiws0WFxUyCwsKiMy7hUVFhIaCrNQsKkTIsLivwKKigsj8XYlwt/WKi2N4d//uQRCSAAjURNIHpMZBGYiaQPSYyAAABLAAAAAAAACWAAAAApUF/Mg+0aohSIRobBAsMlO//Kk4soosy1JSFRYWaLC4qZBYWFRGZdwqKiwkNBVmoWFSJkWFxX4FFRQWR+LsS4W/rFRb/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////VEFHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAU291bmRib3kuZGUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMjAwNGh0dHA6Ly93d3cuc291bmRib3kuZGUAAAAAAAAAACU=",
         );
         snd.play();
       };
@@ -160,9 +242,10 @@ if (typeof document !== "undefined") {
       that.updateByBmpFontSupport = () => {
         // console.log("updateByBmpFontSupport");
         const textArea = $("text_area");
+        const font = $("bpmf-font").value;
         if (globalUi.bpmvdFontsSupport) {
           // console.log("add");
-          textArea.style.fontFamily = "BpmfZihiSerif-Regular";
+          textArea.style.fontFamily = font;
           textArea.style.fontSize = INPUT_FONT_SIZE_BPMF;
           textArea.style.lineHeight = "1.2em";
         } else {
@@ -412,7 +495,7 @@ if (typeof document !== "undefined") {
 
       that.textToBraille = () => {
         const selectedValue = document.querySelector(
-          'input[name="to_braille_format"]:checked'
+          'input[name="to_braille_format"]:checked',
         ).value;
         let converter = null;
         if (selectedValue === "unicode") {
@@ -432,7 +515,7 @@ if (typeof document !== "undefined") {
 
       that.brailleToText = () => {
         const selectedValue = document.querySelector(
-          'input[name="from_braille_format"]:checked'
+          'input[name="from_braille_format"]:checked',
         ).value;
         let converter = null;
         if (selectedValue === "unicode") {
@@ -481,7 +564,7 @@ if (typeof document !== "undefined") {
         if (lines.length === 0) {
           renderEmptyInput(
             "phrase_generate_input_output_container",
-            "phrase_generate_output"
+            "phrase_generate_output",
           );
           return;
         }
@@ -495,7 +578,43 @@ if (typeof document !== "undefined") {
         let finalOutput = output.join("\n");
         let outputTextArea = $("phrase_generate_output");
         outputTextArea.value = finalOutput;
+        syntaxHighlightManager.refresh("phrase_generate_output");
         outputTextArea.focus();
+      };
+
+      that.importContactFile = async (file) => {
+        const importer = window.vCardPhraseImporter;
+        const status = $("vcard_import_status");
+        if (!file || !importer) {
+          return;
+        }
+
+        try {
+          const content = await readTextFile(file);
+          const phrases = importer.extractImportPhrasesFromVCard(content, {
+            includeFirstNamePhrases: getChecked(
+              "vcard_include_first_name_phrases",
+            ),
+          });
+          if (phrases.length === 0) {
+            status.textContent = "找不到可匯入的中文姓名。";
+            return;
+          }
+
+          const inputArea = $("phrase_generate_input");
+          const existing = inputArea.value.trim();
+          const appended = existing
+            ? `${existing}\n${phrases.join("\n")}`
+            : phrases.join("\n");
+
+          inputArea.value = appended;
+          status.textContent = `已匯入 ${phrases.length} 筆詞條。`;
+          that.generatePhrases();
+          inputArea.focus();
+        } catch (error) {
+          console.error("Failed to import contact file:", error);
+          status.textContent = "讀取通訊錄檔案失敗。";
+        }
       };
 
       return that;
@@ -575,41 +694,41 @@ if (typeof document !== "undefined") {
           settings.trad_mode,
           "use_plainbopomofo",
           "use_mcbopomofo",
-          (enabled) => controller.setTraditionalMode(enabled)
+          (enabled) => controller.setTraditionalMode(enabled),
         );
         applyTogglePair(
           settings.chinese_conversion,
           "chinese_convert_simp",
           "chinese_convert_trad",
-          (enabled) => controller.setChineseConversionEnabled(enabled)
+          (enabled) => controller.setChineseConversionEnabled(enabled),
         );
         applyTogglePair(
           settings.half_width_punctuation,
           "half_width_punctuation",
           "full_width_punctuation",
-          (enabled) => controller.setHalfWidthPunctuationEnabled(enabled)
+          (enabled) => controller.setHalfWidthPunctuationEnabled(enabled),
         );
 
         applySelectSetting("layout", settings.layout, (value) =>
-          controller.setKeyboardLayout(value)
+          controller.setKeyboardLayout(value),
         );
         applySelectSetting("keys", settings.candidate_keys, (value) =>
-          controller.setCandidateKeys(value)
+          controller.setCandidateKeys(value),
         );
         applySelectSetting(
           "keys_count",
           settings.candidate_keys_count,
-          (value) => controller.setCandidateKeysCount(value)
+          (value) => controller.setCandidateKeysCount(value),
         );
         applySelectSetting(
           "moving_cursor_option",
           settings.moving_cursor_option,
-          (value) => controller.setMovingCursorOption(value)
+          (value) => controller.setMovingCursorOption(value),
         );
         applySelectSetting(
           "ctrl_enter_option",
           settings.ctrl_enter_option,
-          (value) => controller.setCtrlEnterOption(value)
+          (value) => controller.setCtrlEnterOption(value),
         );
 
         if (settings.select_phrase === "before_cursor") {
@@ -625,21 +744,22 @@ if (typeof document !== "undefined") {
         applyCheckboxSetting(
           "esc_key",
           settings.esc_key_clear_entire_buffer,
-          (checked) => controller.setEscClearEntireBuffer(checked)
+          (checked) => controller.setEscClearEntireBuffer(checked),
         );
         applyCheckboxSetting(
           "allow_change_prior_tone",
           settings.allow_changing_prior_tone,
-          (checked) => controller.setAllowChangingPriorTone(checked)
+          (checked) => controller.setAllowChangingPriorTone(checked),
         );
         applyCheckboxSetting(
           "repeated_punctuation_choose_candidate",
           settings.repeated_punctuation_choose_candidate,
-          (checked) => controller.setRepeatedPunctuationChooseCandidate(checked)
+          (checked) =>
+            controller.setRepeatedPunctuationChooseCandidate(checked),
         );
         applyCheckboxSetting("beep_on_error", settings.beep_on_error);
         applyCheckboxSetting("move_cursor", settings.move_cursor, (checked) =>
-          controller.setMoveCursorAfterSelection(checked)
+          controller.setMoveCursorAfterSelection(checked),
         );
 
         if (settings.bopomofo_font_annotation_support_enabled) {
@@ -651,20 +771,21 @@ if (typeof document !== "undefined") {
           "bopomofo_font_annotation_support_enabled",
           settings.bopomofo_font_annotation_support_enabled,
           (checked) =>
-            controller.setBopomofoFontAnnotationSupportEnabled(checked)
+            controller.setBopomofoFontAnnotationSupportEnabled(checked),
         );
 
         applyTogglePair(
           settings.letter_mode === "upper",
           "uppercase_letters",
           "lowercase_letters",
-          (isUpper) => controller.setLetterMode(isUpper ? "upper" : "lower")
+          (isUpper) => controller.setLetterMode(isUpper ? "upper" : "lower"),
         );
       };
 
       that.loadUserPhrases = () => {
         const result = window.localStorage.getItem("user_phrases") || "";
         $("feature_user_phrases_text_area").value = result;
+        syntaxHighlightManager.refresh("feature_user_phrases_text_area");
         focusElement("feature_user_phrases_text_area");
         console.log("userPhrases:\n" + result);
         controller.setUserPhrases(result);
@@ -676,12 +797,14 @@ if (typeof document !== "undefined") {
         controller.setUserPhrases(result);
         service.service.setUserPhrases(result);
         $("feature_user_phrases_text_area").value = result;
+        syntaxHighlightManager.refresh("feature_user_phrases_text_area");
         focusElement("feature_user_phrases_text_area");
       };
 
       that.loadExcludedPhrases = () => {
         const result = window.localStorage.getItem("excluded_phrases") || "";
         $("feature_excluded_phrases_text_area").value = result;
+        syntaxHighlightManager.refresh("feature_excluded_phrases_text_area");
         focusElement("feature_excluded_phrases_text_area");
         console.log("excludedPhrases:\n" + result);
         controller.setExcludedPhrases(result);
@@ -693,6 +816,7 @@ if (typeof document !== "undefined") {
         controller.setExcludedPhrases(result);
         service.service.setExcludedPhrases(result);
         $("feature_excluded_phrases_text_area").value = result;
+        syntaxHighlightManager.refresh("feature_excluded_phrases_text_area");
         focusElement("feature_excluded_phrases_text_area");
       };
 
@@ -811,7 +935,7 @@ if (typeof document !== "undefined") {
         const handled = controller.simpleKeyboardEvent(
           button,
           api.isShift || api.isLock,
-          api.isCtrl
+          api.isCtrl,
         );
         focusElement("text_area");
 
@@ -1084,6 +1208,14 @@ if (typeof document !== "undefined") {
         focusElement("text_area");
       };
 
+      $("bpmf-font").onchange = (event) => {
+        $("bopomofo_font_annotation_support_enabled").checked = "true";
+        settingsManager.settings.bopomofo_font_annotation_support_enabled = true;
+        settingsManager.saveSettings();
+        globalUi.startSupportBpmfvsFont();
+        focusElement("text_area");
+      };
+
       $("uppercase_letters").onchange = (event) => {
         controller.setLetterMode("upper");
         settingsManager.settings.letter_mode = "upper";
@@ -1203,11 +1335,53 @@ if (typeof document !== "undefined") {
         onHashChange();
       });
       document.addEventListener("DOMContentLoaded", (event) => {
+        const dropZone = $("vcard_drop_zone");
+        const openFileButton = $("vcard_open_file_button");
+        const fileInput = $("vcard_file_input");
+
+        const preventDefaults = (domEvent) => {
+          domEvent.preventDefault();
+          domEvent.stopPropagation();
+        };
+
+        ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
+          dropZone.addEventListener(eventName, preventDefaults);
+        });
+
+        ["dragenter", "dragover"].forEach((eventName) => {
+          dropZone.addEventListener(eventName, () => {
+            dropZone.classList.add("is-dragover");
+          });
+        });
+
+        ["dragleave", "drop"].forEach((eventName) => {
+          dropZone.addEventListener(eventName, () => {
+            dropZone.classList.remove("is-dragover");
+          });
+        });
+
+        dropZone.addEventListener("drop", async (domEvent) => {
+          const file = domEvent.dataTransfer?.files?.[0];
+          await service.importContactFile(file);
+        });
+
+        openFileButton.addEventListener("click", () => {
+          fileInput.click();
+        });
+
+        fileInput.addEventListener("change", async () => {
+          const file = fileInput.files?.[0];
+          await service.importContactFile(file);
+          fileInput.value = "";
+        });
+
         if (window.location.hash.length === 0) {
           window.history.replaceState(null, "", "#feature_input");
         }
+        syntaxHighlightManager.init();
         onHashChange({ focus: false });
         window.requestAnimationFrame(() => {
+          syntaxHighlightManager.refreshAll();
           resetInitialScrollPosition();
         });
       });
