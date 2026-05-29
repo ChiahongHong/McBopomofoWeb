@@ -82,6 +82,8 @@
       <a href="#feature_add_bpmf" title="將國字加上注音">國字加注音</a>
       <a href="#feature_convert_hanyupnyin" title="將國字轉換成漢語拼音">國字轉拼音</a>
       <span>｜</span>
+      <a href="#feature_graph" title="繪製選字路徑圖">選字路徑圖</a>
+      <span>｜</span>
       <a href="https://openvanilla.github.io/McBopomofoWeb/docs/" target="_top" title="API Reference">API Reference</a>
     </div>
 
@@ -130,8 +132,8 @@
             <tr>
               <td class="option_title">自訂詞：</td>
               <td>
-                <a href="#feature_user_phrases" title="自行添加自訂詞">管理自訂詞</a><br />
-                <a href="#feature_excluded_phrases" title="自行管理排除的詞彙">管理排除的詞彙</a>
+                <a href="#feature_user_phrases" title="自行添加自訂詞">自訂詞</a>
+                <a href="#feature_excluded_phrases" title="自行管理排除的詞彙">排除的詞彙</a>
               </td>
             </tr>
             <tr>
@@ -140,27 +142,31 @@
                 <input type="checkbox" name="bopomofo_font_annotation_support_enabled"
                   id="bopomofo_font_annotation_support_enabled" /><label
                   for="bopomofo_font_annotation_support_enabled">使用</label>
-                <p>
+              </td>
+            </tr>
+            <tr>
+              <td class="option_title">注音字體：</td>
+              <td>
+                <select name="bpmf-font" id="bpmf-font">
+                  <option value="BpmfZihiSerif-Regular">
+                    字嗨注音宋體
+                  </option>
+                  <option value="BpmfZihiKaiStd-Regular">
+                    字嗨注音楷書
+                  </option>
+                  <option value="BpmfZihiSans-Regular">字嗨注音黑體</option>
+                  <option value="ToneOZ-Pinyin-Kai-Traditional">
+                    澳聲通拼音庫楷-繁
+                  </option>
+                </select>
+                </p>
+                <details>
+                  <summary>說明</summary>
                   <small>這項功能支援<a href="https://github.com/ButTaiwan/bpmfvs/"
                       target="blank">「字嗨注音字型」</a>，直接將輸入法使用的注音符號，套到對應的注音字體上，啟用之後，會需要一段時間載入字體。請參考
                     <a href="https://blog.justfont.com/2024/05/bpmf-font/" target="blank">
                       justfont 上的說明</a>。</small>
-                </p>
-                <p>
-                  注音字體：
-                  <select name="bpmf-font" id="bpmf-font">
-                    <option value="BpmfZihiSerif-Regular">
-                      字嗨注音宋體
-                    </option>
-                    <option value="BpmfZihiKaiStd-Regular">
-                      字嗨注音楷書
-                    </option>
-                    <option value="BpmfZihiSans-Regular">字嗨注音黑體</option>
-                    <option value="ToneOZ-Pinyin-Kai-Traditional">
-                      澳聲通拼音庫楷-繁
-                    </option>
-                  </select>
-                </p>
+                </details>
               </td>
             </tr>
 
@@ -177,18 +183,18 @@
               <td class="option_title">簡繁轉換：</td>
               <td>
                 <input type="radio" name="chinese_convert" value="trad" id="chinese_convert_trad"
-                  checked="checked" /><label for="chinese_convert_trad">繁體中文</label><br />
+                  checked="checked" /><label for="chinese_convert_trad">繁體</label>
                 <input type="radio" name="chinese_convert" value="simp" id="chinese_convert_simp" /><label
-                  for="chinese_convert_simp">簡體中文</label>
+                  for="chinese_convert_simp">簡體</label>
               </td>
             </tr>
             <tr>
               <td class="option_title">標點符號：</td>
               <td>
                 <input type="radio" name="punctuation" value="0" id="full_width_punctuation" checked="checked" /><label
-                  for="full_width_punctuation">全形標點</label><br />
+                  for="full_width_punctuation">全形</label>
                 <input type="radio" name="punctuation" value="1" id="half_width_punctuation" /><label
-                  for="half_width_punctuation">半形標點</label>
+                  for="half_width_punctuation">半形</label>
               </td>
             </tr>
             <tr>
@@ -247,10 +253,12 @@
               <td class="option_title">選字模式：</td>
               <td>
                 <input type="radio" name="select_phrase" value="before_cursor" id="before_cursor"
-                  checked="checked" /><label for="before_cursor">選擇游標前的字詞</label><br />
+                  checked="checked" /><label for="before_cursor">選游標前的字詞</label> <small>(像漢音)</small><br />
                 <input type="radio" name="select_phrase" value="after_cursor" id="after_cursor" /><label
-                  for="after_cursor">選擇游標後的字詞</label><br />
-                <input type="checkbox" name="move_cursor" id="move_cursor" /><label for="move_cursor">選字之後自動移動游標</label>
+                  for="after_cursor">選游標後的字詞</label> <small>(像微軟新注音)</small><br />
+                <input type="checkbox" name="move_cursor" id="move_cursor" /><label
+                  for="move_cursor">選字後自動移動游標</label><br />
+                <small>(僅在設定為選游標後字詞有用)</small>
               </td>
             </tr>
             <tr>
@@ -286,8 +294,8 @@
               <td class="option_title" id="tone_keys_title">聲調鍵：</td>
               <td>
                 <input type="checkbox" name="allow_change_prior_tone" id="allow_change_prior_tone" /><label
-                  for="allow_change_prior_tone" id="allow_change_prior_tone_label">允許在輸入聲調之後改變聲調（類似 macOS
-                  內建輸入法。僅適用於標準鍵盤佈局）。</label>
+                  for="allow_change_prior_tone" id="allow_change_prior_tone_label">允許在輸入聲調之後改變聲調
+                  <small>（類似 macOS內建輸入法。僅適用於標準鍵盤佈局）。</small></label>
               </td>
             </tr>
             <tr>
@@ -359,10 +367,28 @@
           </ul>
         </details>
         <details>
+          <summary>各平台的小麥注音輸入法</summary>
+          <ul>
+            <li>
+              <a rel="noopener" href="https://github.com/openvanilla/McBopomofo" target="_blank">小麥注音輸入法 macOS 版本</a>
+            </li>
+            <li>
+              <a rel="noopener" href="https://github.com/openvanilla/fcitx5-mcbopomofo" target="_blank">小麥注音輸入法 fcitx5
+                版本</a>
+            </li>
+            <li>
+              <a rel="noopener"
+                href="https://chromewebstore.google.com/detail/mcbopomofo/pkjjfjnlglfhgfaipoempeaghmpfakkg"
+                target="_blank">小麥注音輸入法 ChromeOS 版本</a>
+            </li>
+          </ul>
+
+        </details>
+        <details>
           <summary>小麥網頁輸入法家族</summary>
           <ul>
             <li>
-              <a rel="noopener" href="https://openvanilla.github.io/McTabimWeb" target="_blank"
+              <a rel=" noopener" href="https://openvanilla.github.io/McTabimWeb" target="_blank"
                 title="小麥他命輸入法 Web">小麥他命線上版本</a>
             </li>
             <li>
@@ -381,13 +407,6 @@
           <ul>
             <li>
               <a rel="noopener" href="https://mcbopomofo.openvanilla.org/" target="_blank">小麥注音輸入法官網</a>
-            </li>
-            <li>
-              <a rel="noopener" href="https://github.com/openvanilla/McBopomofo" target="_blank">小麥注音輸入法 macOS 版本</a>
-            </li>
-            <li>
-              <a rel="noopener" href="https://github.com/openvanilla/fcitx5-mcbopomofo" target="_blank">小麥注音輸入法 fcitx5
-                版本</a>
             </li>
             <li>
               <a rel="noopener" href="https://github.com/openvanilla/McBopomofoWeb" target="_blank">小麥注音輸入法網頁版專案首頁</a>
@@ -487,7 +506,7 @@
       <div class="left">
         <div class="phrase_generate">
           <div class="phrase_generate_input_output_container">
-            <textarea placeholder="請在此輸入要產生注音的詞條，一行一條&#10;例如：&#10;小麥注音&#10;傳統注音" id="phrase_generate_input" rows="10"
+            <textarea placeholder="請在此輸入或貼上要產生注音的詞條，一行一條&#10;例如：&#10;小麥注音&#10;傳統注音" id="phrase_generate_input" rows="10"
               cols="50" title="詞庫輸入" autocapitalize="off"></textarea>
           </div>
           <div class="phrase_generate_input_output_container">
@@ -500,57 +519,49 @@
         <h2>詞庫產生工具</h2>
         <p>輸入想要產生的詞條之後（一個詞條一行），按下下方的「轉換」按鈕。</p>
         <p>
-          <button onclick="
-                example.service.generatePhrases();
-                return false;
-              ">
+          <button onclick="example.service.generatePhrases();return false;">
             轉換
           </button>
         </p>
-        <hr />
-        <p>
-          如果您有多筆詞條，想要轉換成小麥注音使用的詞庫，您可以使用這個工具，一次產生所有詞條的注音。
-        </p>
-        <p>使用流程如下</p>
-        <ul>
-          <li>先將要轉換的詞條輸入到左方的輸入框中</li>
-          <li>按下「轉換」按鈕</li>
-          <li>轉換結果將顯示在右方的輸出框中</li>
-        </ul>
-        <p>範例輸入</p>
-        <blockquote>
-          <p>小麥注音輸入法</p>
-        </blockquote>
-        <p>範例輸出</p>
-        <blockquote>
-          <p>小麥注音輸入法 ㄒㄧㄠˇ-ㄇㄞˋ-ㄓㄨˋ-ㄧㄣ-ㄕㄨ-ㄖㄨˋ-ㄈㄚˇ</p>
-        </blockquote>
-        <p>產生的詞條可以用在小麥注音的 macOS、Linux 等各平台版本。</p>
+
+        <details>
+          <summary>說明</summary>
+          <p>
+            如果您有多筆詞條，想要轉換成小麥注音使用的詞庫，您可以使用這個工具，一次產生所有詞條的注音。
+          </p>
+          <p>使用流程如下</p>
+          <ul>
+            <li>先將要轉換的詞條輸入到左方的輸入框中</li>
+            <li>按下「轉換」按鈕</li>
+            <li>轉換結果將顯示在右方的輸出框中</li>
+          </ul>
+          <p>範例輸入</p>
+          <blockquote>
+            <p>小麥注音輸入法</p>
+          </blockquote>
+          <p>範例輸出</p>
+          <blockquote>
+            <p>小麥注音輸入法 ㄒㄧㄠˇ-ㄇㄞˋ-ㄓㄨˋ-ㄧㄣ-ㄕㄨ-ㄖㄨˋ-ㄈㄚˇ</p>
+          </blockquote>
+          <p>產生的詞條可以用在小麥注音的 macOS、Linux 等各平台版本。</p>
+        </details>
 
         <hr />
 
         <div class="vcard_import_panel">
-          <h3>將通訊錄匯入詞庫</h3>
+          <h3>利用通訊錄產生詞庫</h3>
+          <p>拖拉 <code>.vcf</code>/<code>.vcard</code>/<code>.csv</code> 檔案到下方區域，或按按鈕選擇檔案。</p>
           <p>
-            這個工具目前支援 <a href="https://zh.wikipedia.org/wiki/VCard" target="_top">vCard</a> 與 <a
-              href="https://zh.wikipedia.org/wiki/%E9%80%97%E5%8F%B7%E5%88%86%E9%9A%94%E5%80%BC" target="_top">CSV</a>
-            通訊錄格式，包含 Google 與 Outlook 通訊錄常見的匯出 CSV。
-          </p>
-          <p>這項轉換工作只會在這個網頁中，只使用前端技術完成，不會將您的資料上
-            傳到任何主機上。</p>
-          <p>您可以拖拉 <code>.vcf</code>/<code>.vcard</code>/<code>.csv</code> 檔案到下方區域，或按按鈕選擇檔案。</p>
-          <p>
-            <label>
-              <input type="checkbox" id="vcard_include_first_name_phrases" />
+            <input type="checkbox" id="vcard_include_first_name_phrases" />
+            <label for="vcard_include_first_name_phrases">
               同時也只產生名字的詞條，例如：除了「楊維中」以外，也產生「維中」。
             </label>
           </p>
-          <div id="vcard_drop_zone" class="vcard_drop_zone" tabindex="0">
+          <div id="vcard_drop_zone" class="vcard_drop_zone" tabindex="0" style="margin-bottom: 8px;">
             將通訊錄檔案拖拉到這裡
           </div>
-          <br />
           <p>
-            <button type="button" id="vcard_open_file_button">
+            <button type="button" id="vcard_open_file_button" style="width: 100%;">
               選擇通訊錄檔案
             </button>
             <input type="file" id="vcard_file_input" accept=".vcf,.vcard,.csv,text/vcard,text/csv" hidden />
@@ -558,41 +569,53 @@
           <p id="vcard_import_status" class="vcard_import_status">
             尚未匯入通訊錄檔案。
           </p>
-          <table class="vcard_services_table">
-            <thead>
-              <tr>
-                <th>網路服務</th>
-                <th>格式</th>
-                <th>說明</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><a href="https://www.google.com/contacts" target="_top">Google 通訊錄</a></td>
-                <td>CSV, vCard</td>
-                <td><a href="https://support.google.com/contacts/answer/7199294" target="_top">匯出 Google 聯絡人為 CSV</a>
-                </td>
-              </tr>
-              <tr>
-                <td><a href="https://outlook.live.com/people/" target="_top">Outlook 通訊錄</a></td>
-                <td>CSV</td>
-                <td><a
-                    href="https://support.microsoft.com/zh-tw/office/%E5%B0%87%E8%81%AF%E7%B5%A1%E4%BA%BA%E4%BB%A5-vcard-%E6%AA%94%E6%A1%88-vcf-%E5%84%B2%E5%AD%98-94a17a6f-105f-46c7-9308-33658c1c2690#:~:text=%E4%BD%A0%E5%8F%AF%E4%BB%A5%E4%BB%A5%20vCard%20%28.vcf%29%20%E6%A0%BC%E5%BC%8F%EF%BC%8C%E5%B0%87%20Microsoft%20Outlook%20%E8%81%AF%E7%B5%A1%E8%B3%87%E8%A8%8A%E2%80%94%E2%80%94%E7%84%A1%E8%AB%96%E6%98%AF%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E9%82%84%E6%98%AF%E5%88%A5%E4%BA%BA%E7%9A%84%E2%80%94%E2%80%94%E5%82%B3%E9%80%81%E7%B5%A6%E4%BB%96%E4%BA%BA%E3%80%82%20%E7%95%B6%E6%94%B6%E4%BB%B6%E4%BA%BA%E6%89%93%E9%96%8B%E8%A8%8A%E6%81%AF%E4%B8%AD%E6%94%B6%E5%88%B0%E7%9A%84,%E6%99%82%EF%BC%8C%E6%9C%83%E9%96%8B%E5%95%9F%E4%B8%80%E5%80%8B%20%E9%80%A3%E7%B5%A1%E4%BA%BA%E8%A1%A8%E5%96%AE%20%EF%BC%8C%E9%A1%AF%E7%A4%BA%E8%81%AF%E7%B5%A1%E8%B3%87%E8%A8%8A%E3%80%82%20%E4%BD%A0%E5%8F%AF%E4%BB%A5%E9%81%B8%E6%93%87%E4%B8%A6%E5%84%B2%E5%AD%98%E6%94%B6%E5%88%B0%E7%9A%84%20.vcf%20%E6%AA%94%E6%A1%88%EF%BC%8C%E7%9B%B4%E6%8E%A5%E5%8A%A0%E5%85%A5%20Outlook%20%E8%81%AF%E7%B5%A1%E4%BA%BA%EF%BC%8C%E5%84%B2%E5%AD%98%E6%89%80%E6%9C%89%E8%B3%87%E8%A8%8A%E3%80%82"
-                    target="_top">將聯絡人以 vCard 檔案 (.vcf) 儲存</a></td>
-              </tr>
-              <tr>
-                <td><a href="https://www.icloud.com/contacts/" target="_top">iCloud 通訊錄</a></td>
-                <td>vCard</td>
-                <td><a href="https://support.apple.com/zh-tw/guide/contacts/adrbd767a069/mac" target="_top">在 Mac
-                    上的「聯絡人」中分享聯絡人</a></td>
-              </tr>
-              <tr>
-                <td><a href="https://mail.yahoo.com/" target="_top">Yahoo 信箱</a></td>
-                <td>CSV</td>
-                <td><a href="https://hk.help.yahoo.com/kb/SLN28070.html" target="_top">在 Yahoo Mail 匯入、匯出或列印聯絡人</a></td>
-              </tr>
-            </tbody>
-          </table>
+
+          <details>
+            <summary>說明</summary>
+            <p>
+              這個工具目前支援 <a href="https://zh.wikipedia.org/wiki/VCard" target="_top">vCard</a> 與 <a
+                href="https://zh.wikipedia.org/wiki/%E9%80%97%E5%8F%B7%E5%88%86%E9%9A%94%E5%80%BC" target="_top">CSV</a>
+              通訊錄格式，包含 Google 與 Outlook 通訊錄常見的匯出 CSV。
+            </p>
+            <p>這項轉換工作只會在這個網頁中，只使用前端技術完成，不會將您的資料上
+              傳到任何主機上。</p>
+            <table class="vcard_services_table">
+              <thead>
+                <tr>
+                  <th>網路服務</th>
+                  <th>格式</th>
+                  <th>說明</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><a href="https://www.google.com/contacts" target="_top">Google 通訊錄</a></td>
+                  <td>CSV, vCard</td>
+                  <td><a href="https://support.google.com/contacts/answer/7199294" target="_top">匯出 Google 聯絡人為 CSV</a>
+                  </td>
+                </tr>
+                <tr>
+                  <td><a href="https://outlook.live.com/people/" target="_top">Outlook 通訊錄</a></td>
+                  <td>CSV</td>
+                  <td><a
+                      href="https://support.microsoft.com/zh-tw/office/%E5%B0%87%E8%81%AF%E7%B5%A1%E4%BA%BA%E4%BB%A5-vcard-%E6%AA%94%E6%A1%88-vcf-%E5%84%B2%E5%AD%98-94a17a6f-105f-46c7-9308-33658c1c2690#:~:text=%E4%BD%A0%E5%8F%AF%E4%BB%A5%E4%BB%A5%20vCard%20%28.vcf%29%20%E6%A0%BC%E5%BC%8F%EF%BC%8C%E5%B0%87%20Microsoft%20Outlook%20%E8%81%AF%E7%B5%A1%E8%B3%87%E8%A8%8A%E2%80%94%E2%80%94%E7%84%A1%E8%AB%96%E6%98%AF%E4%BD%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E9%82%84%E6%98%AF%E5%88%A5%E4%BA%BA%E7%9A%84%E2%80%94%E2%80%94%E5%82%B3%E9%80%81%E7%B5%A6%E4%BB%96%E4%BA%BA%E3%80%82%20%E7%95%B6%E6%94%B6%E4%BB%B6%E4%BA%BA%E6%89%93%E9%96%8B%E8%A8%8A%E6%81%AF%E4%B8%AD%E6%94%B6%E5%88%B0%E7%9A%84,%E6%99%82%EF%BC%8C%E6%9C%83%E9%96%8B%E5%95%9F%E4%B8%80%E5%80%8B%20%E9%80%A3%E7%B5%A1%E4%BA%BA%E8%A1%A8%E5%96%AE%20%EF%BC%8C%E9%A1%AF%E7%A4%BA%E8%81%AF%E7%B5%A1%E8%B3%87%E8%A8%8A%E3%80%82%20%E4%BD%A0%E5%8F%AF%E4%BB%A5%E9%81%B8%E6%93%87%E4%B8%A6%E5%84%B2%E5%AD%98%E6%94%B6%E5%88%B0%E7%9A%84%20.vcf%20%E6%AA%94%E6%A1%88%EF%BC%8C%E7%9B%B4%E6%8E%A5%E5%8A%A0%E5%85%A5%20Outlook%20%E8%81%AF%E7%B5%A1%E4%BA%BA%EF%BC%8C%E5%84%B2%E5%AD%98%E6%89%80%E6%9C%89%E8%B3%87%E8%A8%8A%E3%80%82"
+                      target="_top">將聯絡人以 vCard 檔案 (.vcf) 儲存</a></td>
+                </tr>
+                <tr>
+                  <td><a href="https://www.icloud.com/contacts/" target="_top">iCloud 通訊錄</a></td>
+                  <td>vCard</td>
+                  <td><a href="https://support.apple.com/zh-tw/guide/contacts/adrbd767a069/mac" target="_top">在 Mac
+                      上的「聯絡人」中分享聯絡人</a></td>
+                </tr>
+                <tr>
+                  <td><a href="https://mail.yahoo.com/" target="_top">Yahoo 信箱</a></td>
+                  <td>CSV</td>
+                  <td><a href="https://hk.help.yahoo.com/kb/SLN28070.html" target="_top">在 Yahoo Mail 匯入、匯出或列印聯絡人</a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </details>
         </div>
 
       </div>
@@ -600,7 +623,7 @@
 
     <section id="feature_text_to_braille" class="feature">
       <div class="left">
-        <textarea placeholder="請在此輸入國字" id="text_to_braille_text_area" rows="10" cols="50" title="輸入區"
+        <textarea placeholder="請在此輸入或貼上國字" id="text_to_braille_text_area" rows="10" cols="50" title="輸入區"
           autocapitalize="off"></textarea>
         <p>
           點字格式：
@@ -639,7 +662,7 @@
 
     <section id="feature_braille_to_text" class="feature">
       <div class="left">
-        <textarea placeholder="請在此輸入六點注音" id="braille_to_text_text_area" rows="10" cols="50" title="輸入區"
+        <textarea placeholder="請在此輸入或貼上六點注音" id="braille_to_text_text_area" rows="10" cols="50" title="輸入區"
           autocapitalize="off"></textarea>
         <p>
           點字格式：
@@ -681,7 +704,7 @@
 
     <section id="feature_add_bpmf" class="feature">
       <div class="left">
-        <textarea placeholder="請在此輸入國字" id="add_bpmf_text_area" rows="10" cols="50" title="輸入區"
+        <textarea placeholder="請在此輸入或貼上國字" id="add_bpmf_text_area" rows="10" cols="50" title="輸入區"
           autocapitalize="off"></textarea>
         <p>
           <button type="button" onclick="example.service.addBpmf()">
@@ -729,7 +752,7 @@
 
     <section id="feature_convert_hanyupnyin" class="feature">
       <div class="left">
-        <textarea placeholder="請在此輸入國字" id="convert_hanyupnyin_text_area" rows="10" cols="50" title="輸入區"
+        <textarea placeholder="請在此輸入或貼上國字" id="convert_hanyupnyin_text_area" rows="10" cols="50" title="輸入區"
           autocapitalize="off"></textarea>
         <p>
           <button type="button" onclick="example.service.convertHanyuPinyin()">
@@ -750,6 +773,56 @@
       </div>
     </section>
 
+    <section id="feature_graph" class="feature" style="display: none;">
+      <div class="left">
+        <textarea placeholder="輸入注音符號，例如：ㄒㄧㄠˇ ㄇㄞˋ ㄓㄨˋ ㄧㄣ" id="feature_graph_text_area" rows="4" cols="50" title="輸入區"
+          autocapitalize="off"></textarea>
+        <div id="graph_ime_warning" style="
+              display: none;
+              background-color: #ffeb3b;
+              color: #d84315;
+              padding: 8px;
+              margin-top: 8px;
+              margin-bottom: 8px;
+              border-radius: 4px;
+              font-weight: bold;
+            ">
+          ⚠️
+          偵測到系統輸入法介入，請暫時關閉您的系統輸入法，直接使用英數鍵盤打字。
+        </div>
+        <p>
+          <button type="button" onclick="example.service.drawGraph()">
+            產生選字路徑圖
+          </button>
+        </p>
+        <div id="graph_walk_result">
+          <div>
+            <input type="text" id="graph_result_text" disabled title="選字演算法結果" />
+            <input type="text" id="graph_result_score" disabled title="加總對數機率 (log-probability)" />
+          </div>
+        </div>
+        <div id="mermaid_graph_container">
+          <div id="mermaid_graph_actions">
+            <button type="button" onclick="example.service.downloadGraphSVG()">下載 SVG</button>
+            <button type="button" onclick="example.service.downloadGraphPNG()">下載 PNG</button>
+          </div>
+          <pre class="mermaid" id="mermaid_graph_output"></pre>
+        </div>
+      </div>
+      <div class="right">
+        <h2>選字路徑圖</h2>
+        <p>請在輸入框中輸入注音符號 (以空格或連字號分隔) 或鍵盤對應鍵。</p>
+        <p>
+          此功能可讓您檢視小麥注音的選字演算法原理，並繪製出狀態轉移圖：
+        </p>
+        <ul>
+          <li>每個節點代表音節之間的分隔位置 (例如 5 個音節有 V0 ~ V5)</li>
+          <li>有向邊代表從某個位置開始、跨越特定長度的候選詞彙與其權重 (對數機率)</li>
+          <li>著色路徑代表最終被演算法選中的最佳結果</li>
+        </ul>
+      </div>
+    </section>
+
     <footer class="credit">
       Copyright (c) 2022 and onwards The McBopomofo Authors. This code is
       released under the MIT license.版本：2.0.4.
@@ -758,6 +831,7 @@
   </main>
 </body>
 
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/simple-keyboard/3.8.84/index.js"
   integrity="sha512-7yqZlyJktAkpzg+ARxg3IwkgZ4hPzP7MBE5XK1kA5UASQUiI8v9uVJTGyC82k3/SVcyi/uInOtsHGhQrG2fqQQ=="
   crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -765,5 +839,7 @@
 <script lang="javascript" src="phraseSyntaxHighlighter.js"></script>
 <script lang="javascript" src="vCardPhraseImporter.js"></script>
 <script lang="javascript" src="index.js"></script>
+<script lang="javascript" src="webmcp.js"></script>
+<script lang="javascript" src="webmcpIntegration.js"></script>
 
 </html>
