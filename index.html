@@ -92,6 +92,7 @@
         <div id="edit_area">
           <div class="status_area">
             <div class="status" id="status">【中文】</div>
+            <div id="keyhandle_time"></div>
             <div class="menu_visible" id="menu_visible">
               <a href="#" id="fullscreen">全螢幕編輯</a>
             </div>
@@ -207,6 +208,9 @@
                   <option value="ETen26">倚天 26</option>
                   <option value="HanyuPinyin">漢語拼音</option>
                   <option value="IBM">IBM</option>
+                  <option value="Su">蘇式</option>
+                  <option value="GinYieh">精業</option>
+                  <option value="MITAC">神通</option>
                 </select><br />
                 <p>
                   關於各種鍵盤配置的差異，請參見
@@ -310,6 +314,8 @@
             <tr>
               <td class="option_title">其他：</td>
               <td>
+                <input type="checkbox" name="prefer_longer_phrases" id="prefer_longer_phrases" /><label
+                  for="prefer_longer_phrases" id="prefer_longer_phrases_label">增加長詞的權重</label><br />
                 <input type="checkbox" name="beep_on_error" id="beep_on_error" /><label for="beep_on_error">錯誤時發出<a
                     onclick="
                         example.ui.beep();
@@ -657,6 +663,8 @@
         <p>
           在一般電腦上看 ASCII 點字會像是亂碼，可以搭配特定的點字字體顯示。
         </p>
+        <h3>相關工具</h3>
+        <p>這個工具不支援 UEB 英文縮寫點字。如果您有相關需求，也可以參考<a href="https://hurthuang.github.io/vi-tools/#braille">視障輔助工具集</a>網頁。</p>
       </div>
     </section>
 
@@ -699,6 +707,8 @@
         <p>
           在一般電腦上看 ASCII 點字會像是亂碼，可以搭配特定的點字字體顯示。
         </p>
+        <h3>相關工具</h3>
+        <p>這個工具不支援 UEB 英文縮寫點字。如果您有相關需求，也可以參考<a href="https://hurthuang.github.io/vi-tools/#g2">視障輔助工具集</a>網頁。</p>
       </div>
     </section>
 
@@ -817,15 +827,40 @@
         </p>
         <ul>
           <li>每個節點代表音節之間的分隔位置 (例如 5 個音節有 V0 ~ V5)</li>
-          <li>有向邊代表從某個位置開始、跨越特定長度的候選詞彙與其權重 (對數機率)</li>
+          <li>有向邊代表從某個位置開始，跨越特定長度的候選詞彙與其權重 (對數機率)</li>
           <li>著色路徑代表最終被演算法選中的最佳結果</li>
         </ul>
+        <table>
+          <tr>
+            <td class="option_title">鍵盤配置：</td>
+            <td>
+              <select id="graph_layout" title="選字路徑圖鍵盤配置">
+                <option value="Standard">標準</option>
+                <option value="ETen">倚天</option>
+                <option value="Hsu">許式</option>
+                <option value="ETen26">倚天 26</option>
+                <option value="HanyuPinyin">漢語拼音</option>
+                <option value="IBM">IBM</option>
+                <option value="Su">蘇式</option>
+                <option value="GinYieh">精業</option>
+                <option value="MITAC">神通</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td class="option_title">其他：</td>
+            <td>
+              <input type="checkbox" name="graph_prefer_longer_phrases" id="graph_prefer_longer_phrases" /><label
+                for="graph_prefer_longer_phrases" id="graph_prefer_longer_phrases_label">增加長詞的權重</label><br />
+            </td>
+          </tr>
+        </table>
       </div>
     </section>
 
     <footer class="credit">
       Copyright (c) 2022 and onwards The McBopomofo Authors. This code is
-      released under the MIT license.版本：2.0.4.
+      released under the MIT license.版本：2.0.5.
       <a href="privacy_policy.html">隱私權政策</a>
     </footer>
   </main>

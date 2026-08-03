@@ -105,7 +105,7 @@ if (typeof document !== "undefined") {
         renderEmptyInput(emptyOutputId, inputId);
         return null;
       }
-      
+
       if (typeof gtag === "function") {
         gtag("event", "use_tool", {
           tool_name: inputId,
@@ -144,7 +144,8 @@ if (typeof document !== "undefined") {
           return;
         }
 
-        field.content.innerHTML = renderer.renderHtml(field.textarea.value) + "\n";
+        field.content.innerHTML =
+          renderer.renderHtml(field.textarea.value) + "\n";
         syncScroll(field.textarea, field.backdrop);
       };
 
@@ -185,7 +186,9 @@ if (typeof document !== "undefined") {
 
         textarea.classList.add("syntax-highlight-input");
         textarea.addEventListener("input", () => renderField(id));
-        textarea.addEventListener("scroll", () => syncScroll(textarea, backdrop));
+        textarea.addEventListener("scroll", () =>
+          syncScroll(textarea, backdrop)
+        );
 
         fields.set(id, {
           textarea,
@@ -215,7 +218,7 @@ if (typeof document !== "undefined") {
       const that = {};
       that.beep = () => {
         const snd = new Audio(
-          "data:audio/wav;base64,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qJrx4KOQjahZxWbcZgztj2c49nKmkId44S71j0c8eV9yDK6uPRzx5X18eDvjvQ6yKo9ZSS6l//8elePK/Lf//IInrOF/FvDoADYAGBMGb7FtErm5MXMlmPAJQVgWta7Zx2go+8xJ0UiCb8LHHdftWyLJE0QIAIsI+UbXu67dZMjmgDGCGl1H+vpF4NSDckSIkk7Vd+sxEhBQMRU8j/12UIRhzSaUdQ+rQU5kGeFxm+hb1oh6pWWmv3uvmReDl0UnvtapVaIzo1jZbf/pD6ElLqSX+rUmOQNpJFa/r+sa4e/pBlAABoAAAAA3CUgShLdGIxsY7AUABPRrgCABdDuQ5GC7DqPQCgbbJUAoRSUj+NIEig0YfyWUho1VBBBA//uQZB4ABZx5zfMakeAAAAmwAAAAF5F3P0w9GtAAACfAAAAAwLhMDmAYWMgVEG1U0FIGCBgXBXAtfMH10000EEEEEECUBYln03TTTdNBDZopopYvrTTdNa325mImNg3TTPV9q3pmY0xoO6bv3r00y+IDGid/9aaaZTGMuj9mpu9Mpio1dXrr5HERTZSmqU36A3CumzN/9Robv/Xx4v9ijkSRSNLQhAWumap82WRSBUqXStV/YcS+XVLnSS+WLDroqArFkMEsAS+eWmrUzrO0oEmE40RlMZ5+ODIkAyKAGUwZ3mVKmcamcJnMW26MRPgUw6j+LkhyHGVGYjSUUKNpuJUQoOIAyDvEyG8S5yfK6dhZc0Tx1KI/gviKL6qvvFs1+bWtaz58uUNnryq6kt5RzOCkPWlVqVX2a/EEBUdU1KrXLf40GoiiFXK///qpoiDXrOgqDR38JB0bw7SoL+ZB9o1RCkQjQ2CBYZKd/+VJxZRRZlqSkKiws0WFxUyCwsKiMy7hUVFhIaCrNQsKkTIsLivwKKigsj8XYlwt/WKi2N4d//uQRCSAAjURNIHpMZBGYiaQPSYyAAABLAAAAAAAACWAAAAApUF/Mg+0aohSIRobBAsMlO//Kk4soosy1JSFRYWaLC4qZBYWFRGZdwqKiwkNBVmoWFSJkWFxX4FFRQWR+LsS4W/rFRb/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////VEFHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAU291bmRib3kuZGUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMjAwNGh0dHA6Ly93d3cuc291bmRib3kuZGUAAAAAAAAAACU=",
+          "data:audio/wav;base64,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qJrx4KOQjahZxWbcZgztj2c49nKmkId44S71j0c8eV9yDK6uPRzx5X18eDvjvQ6yKo9ZSS6l//8elePK/Lf//IInrOF/FvDoADYAGBMGb7FtErm5MXMlmPAJQVgWta7Zx2go+8xJ0UiCb8LHHdftWyLJE0QIAIsI+UbXu67dZMjmgDGCGl1H+vpF4NSDckSIkk7Vd+sxEhBQMRU8j/12UIRhzSaUdQ+rQU5kGeFxm+hb1oh6pWWmv3uvmReDl0UnvtapVaIzo1jZbf/pD6ElLqSX+rUmOQNpJFa/r+sa4e/pBlAABoAAAAA3CUgShLdGIxsY7AUABPRrgCABdDuQ5GC7DqPQCgbbJUAoRSUj+NIEig0YfyWUho1VBBBA//uQZB4ABZx5zfMakeAAAAmwAAAAF5F3P0w9GtAAACfAAAAAwLhMDmAYWMgVEG1U0FIGCBgXBXAtfMH10000EEEEEECUBYln03TTTdNBDZopopYvrTTdNa325mImNg3TTPV9q3pmY0xoO6bv3r00y+IDGid/9aaaZTGMuj9mpu9Mpio1dXrr5HERTZSmqU36A3CumzN/9Robv/Xx4v9ijkSRSNLQhAWumap82WRSBUqXStV/YcS+XVLnSS+WLDroqArFkMEsAS+eWmrUzrO0oEmE40RlMZ5+ODIkAyKAGUwZ3mVKmcamcJnMW26MRPgUw6j+LkhyHGVGYjSUUKNpuJUQoOIAyDvEyG8S5yfK6dhZc0Tx1KI/gviKL6qvvFs1+bWtaz58uUNnryq6kt5RzOCkPWlVqVX2a/EEBUdU1KrXLf40GoiiFXK///qpoiDXrOgqDR38JB0bw7SoL+ZB9o1RCkQjQ2CBYZKd/+VJxZRRZlqSkKiws0WFxUyCwsKiMy7hUVFhIaCrNQsKkTIsLivwKKigsj8XYlwt/WKi2N4d//uQRCSAAjURNIHpMZBGYiaQPSYyAAABLAAAAAAAACWAAAAApUF/Mg+0aohSIRobBAsMlO//Kk4soosy1JSFRYWaLC4qZBYWFRGZdwqKiwkNBVmoWFSJkWFxX4FFRQWR+LsS4W/rFRb/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////VEFHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAU291bmRib3kuZGUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMjAwNGh0dHA6Ly93d3cuc291bmRib3kuZGUAAAAAAAAAACU="
         );
         snd.play();
       };
@@ -472,6 +475,35 @@ if (typeof document !== "undefined") {
     })();
 
     const { InputController, Service } = window.mcbopomofo;
+
+    function getGraphLayoutName() {
+      const graphLayout = $("graph_layout");
+      return graphLayout ? graphLayout.value : settingsManager.settings.layout;
+    }
+
+    function getActiveLayout() {
+      const { BopomofoKeyboardLayout } = window.mcbopomofo;
+      const name = getGraphLayoutName() || "Standard";
+      switch (name) {
+        case "ETen":
+          return BopomofoKeyboardLayout.ETenLayout;
+        case "Hsu":
+          return BopomofoKeyboardLayout.HsuLayout;
+        case "ETen26":
+          return BopomofoKeyboardLayout.ETen26Layout;
+        case "HanyuPinyin":
+          return BopomofoKeyboardLayout.HanyuPinyinLayout;
+        case "IBM":
+          return BopomofoKeyboardLayout.IBMLayout;
+        case "Su":
+          return BopomofoKeyboardLayout.SuLayout;
+        case "GinYieh":
+          return BopomofoKeyboardLayout.GinYiehLayout;
+        default:
+          return BopomofoKeyboardLayout.StandardLayout;
+      }
+    }
+
     const controller = (() => {
       const controller = new InputController(ui);
       controller.setUserVerticalCandidates(true);
@@ -502,7 +534,7 @@ if (typeof document !== "undefined") {
 
       that.textToBraille = () => {
         const selectedValue = document.querySelector(
-          'input[name="to_braille_format"]:checked',
+          'input[name="to_braille_format"]:checked'
         ).value;
         let converter = null;
         if (selectedValue === "unicode") {
@@ -522,7 +554,7 @@ if (typeof document !== "undefined") {
 
       that.brailleToText = () => {
         const selectedValue = document.querySelector(
-          'input[name="from_braille_format"]:checked',
+          'input[name="from_braille_format"]:checked'
         ).value;
         let converter = null;
         if (selectedValue === "unicode") {
@@ -571,7 +603,7 @@ if (typeof document !== "undefined") {
         if (lines.length === 0) {
           renderEmptyInput(
             "phrase_generate_input_output_container",
-            "phrase_generate_output",
+            "phrase_generate_output"
           );
           return;
         }
@@ -600,7 +632,7 @@ if (typeof document !== "undefined") {
           const content = await readTextFile(file);
           const phrases = importer.extractImportPhrasesFromVCard(content, {
             includeFirstNamePhrases: getChecked(
-              "vcard_include_first_name_phrases",
+              "vcard_include_first_name_phrases"
             ),
           });
           if (phrases.length === 0) {
@@ -638,7 +670,7 @@ if (typeof document !== "undefined") {
           if (typeof mermaid !== "undefined") {
             try {
               await mermaid.run({
-                nodes: [container]
+                nodes: [container],
               });
             } catch (err) {
               console.error(err);
@@ -647,11 +679,12 @@ if (typeof document !== "undefined") {
           return;
         }
 
-        const graphString = that.service.generateMermaidGraph(text);
+        const layout = getActiveLayout();
+        const graphString = that.service.generateMermaidGraph(text, layout);
         container.innerHTML = graphString;
         container.removeAttribute("data-processed");
 
-        const walkResult = that.service.getWalkResult(text);
+        const walkResult = that.service.getWalkResult(text, layout);
         if (resultRow && resultText && resultScore) {
           resultText.value = walkResult.text;
           resultScore.value = `${walkResult.score.toFixed(2)}`;
@@ -661,7 +694,7 @@ if (typeof document !== "undefined") {
         if (typeof mermaid !== "undefined") {
           try {
             await mermaid.run({
-              nodes: [container]
+              nodes: [container],
             });
           } catch (err) {
             console.error("Mermaid error:", err);
@@ -672,12 +705,75 @@ if (typeof document !== "undefined") {
         }
       };
 
+      function getGraphSvgBounds(svg) {
+        let x = 0;
+        let y = 0;
+        let width = 800;
+        let height = 600;
+
+        try {
+          const bbox = svg.getBBox();
+          if (bbox.width > 0 && bbox.height > 0) {
+            x = bbox.x;
+            y = bbox.y;
+            width = bbox.width;
+            height = bbox.height;
+          } else if (
+            svg.viewBox &&
+            svg.viewBox.baseVal &&
+            svg.viewBox.baseVal.width > 0
+          ) {
+            x = svg.viewBox.baseVal.x;
+            y = svg.viewBox.baseVal.y;
+            width = svg.viewBox.baseVal.width;
+            height = svg.viewBox.baseVal.height;
+          } else {
+            const rect = svg.getBoundingClientRect();
+            width = rect.width || width;
+            height = rect.height || height;
+          }
+        } catch (e) {
+          console.warn(
+            "Could not read SVG content bounds, using rendered dimensions.",
+            e
+          );
+          const rect = svg.getBoundingClientRect();
+          width = rect.width || width;
+          height = rect.height || height;
+        }
+
+        return { x, y, width, height };
+      }
+
+      function cloneGraphSvgForExport(svg, scale = 1) {
+        const bounds = getGraphSvgBounds(svg);
+        const padding = 16;
+        const paddedX = bounds.x - padding;
+        const paddedY = bounds.y - padding;
+        const paddedWidth = bounds.width + padding * 2;
+        const paddedHeight = bounds.height + padding * 2;
+        const exportWidth = Math.ceil(paddedWidth * scale);
+        const exportHeight = Math.ceil(paddedHeight * scale);
+        const clonedSvg = svg.cloneNode(true);
+        clonedSvg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+        clonedSvg.setAttribute(
+          "viewBox",
+          `${paddedX} ${paddedY} ${paddedWidth} ${paddedHeight}`
+        );
+        clonedSvg.setAttribute("width", `${exportWidth}`);
+        clonedSvg.setAttribute("height", `${exportHeight}`);
+        clonedSvg.removeAttribute("style");
+
+        return { svg: clonedSvg, width: exportWidth, height: exportHeight };
+      }
+
       that.downloadGraphSVG = () => {
         const container = $("mermaid_graph_output");
         const svg = container.querySelector("svg");
         if (!svg) return;
 
-        const svgData = new XMLSerializer().serializeToString(svg);
+        const exportSvg = cloneGraphSvgForExport(svg);
+        const svgData = new XMLSerializer().serializeToString(exportSvg.svg);
         const svgBlob = new Blob([svgData], {
           type: "image/svg+xml;charset=utf-8",
         });
@@ -696,48 +792,18 @@ if (typeof document !== "undefined") {
         const svg = container.querySelector("svg");
         if (!svg) return;
 
-        let svgData = new XMLSerializer().serializeToString(svg);
-        
-        // Ensure SVG namespace is present
-        if (!svgData.match(/xmlns="http:\/\/www\.w3\.org\/2000\/svg"/)) {
-          svgData = svgData.replace('<svg', '<svg xmlns="http://www.w3.org/2000/svg"');
-        }
-
+        const exportSvg = cloneGraphSvgForExport(svg, 4);
+        const svgData = new XMLSerializer().serializeToString(exportSvg.svg);
         const canvas = document.createElement("canvas");
         const ctx = canvas.getContext("2d");
         const img = new Image();
-        
-        // Some browsers require base64 for SVG containing foreignObjects to render in canvas
-        const encodedData = encodeURIComponent(svgData);
-        img.src = "data:image/svg+xml;charset=utf-8," + encodedData;
 
         img.onload = () => {
-          let width = 800;
-          let height = 600;
-          
-          try {
-            if (svg.viewBox && svg.viewBox.baseVal && svg.viewBox.baseVal.width > 0) {
-              width = svg.viewBox.baseVal.width;
-              height = svg.viewBox.baseVal.height;
-            } else {
-              const bbox = svg.getBoundingClientRect();
-              width = bbox.width;
-              height = bbox.height;
-            }
-          } catch (e) {
-            console.warn("Could not read SVG dimensions, using bounding client rect.", e);
-            const bbox = svg.getBoundingClientRect();
-            width = bbox.width || 800;
-            height = bbox.height || 600;
-          }
-
-          const scale = 2;
-          canvas.width = width * scale;
-          canvas.height = height * scale;
+          canvas.width = exportSvg.width;
+          canvas.height = exportSvg.height;
           ctx.fillStyle = "white";
           ctx.fillRect(0, 0, canvas.width, canvas.height);
-          ctx.scale(scale, scale);
-          ctx.drawImage(img, 0, 0, width, height);
+          ctx.drawImage(img, 0, 0, exportSvg.width, exportSvg.height);
 
           try {
             const pngUrl = canvas.toDataURL("image/png");
@@ -748,13 +814,20 @@ if (typeof document !== "undefined") {
             downloadLink.click();
             document.body.removeChild(downloadLink);
           } catch (e) {
-            console.error("Canvas toDataURL failed. The canvas might be tainted.", e);
+            console.error(
+              "Canvas toDataURL failed. The canvas might be tainted.",
+              e
+            );
           }
         };
 
         img.onerror = (e) => {
           console.error("Failed to load SVG into Image object.", e);
         };
+
+        // Some browsers require percent encoding for SVG data URLs before canvas rendering.
+        const encodedData = encodeURIComponent(svgData);
+        img.src = "data:image/svg+xml;charset=utf-8," + encodedData;
       };
 
       return that;
@@ -779,6 +852,7 @@ if (typeof document !== "undefined") {
         repeated_punctuation_choose_candidate: false,
         bopomofo_font_annotation_support_enabled: false,
         allow_changing_prior_tone: false,
+        prefer_longer_phrases: false,
       };
 
       that.settings = that.defaultSettings;
@@ -834,41 +908,42 @@ if (typeof document !== "undefined") {
           settings.trad_mode,
           "use_plainbopomofo",
           "use_mcbopomofo",
-          (enabled) => controller.setTraditionalMode(enabled),
+          (enabled) => controller.setTraditionalMode(enabled)
         );
         applyTogglePair(
           settings.chinese_conversion,
           "chinese_convert_simp",
           "chinese_convert_trad",
-          (enabled) => controller.setChineseConversionEnabled(enabled),
+          (enabled) => controller.setChineseConversionEnabled(enabled)
         );
         applyTogglePair(
           settings.half_width_punctuation,
           "half_width_punctuation",
           "full_width_punctuation",
-          (enabled) => controller.setHalfWidthPunctuationEnabled(enabled),
+          (enabled) => controller.setHalfWidthPunctuationEnabled(enabled)
         );
 
         applySelectSetting("layout", settings.layout, (value) =>
-          controller.setKeyboardLayout(value),
+          controller.setKeyboardLayout(value)
         );
+        applySelectSetting("graph_layout", settings.layout, () => undefined);
         applySelectSetting("keys", settings.candidate_keys, (value) =>
-          controller.setCandidateKeys(value),
+          controller.setCandidateKeys(value)
         );
         applySelectSetting(
           "keys_count",
           settings.candidate_keys_count,
-          (value) => controller.setCandidateKeysCount(value),
+          (value) => controller.setCandidateKeysCount(value)
         );
         applySelectSetting(
           "moving_cursor_option",
           settings.moving_cursor_option,
-          (value) => controller.setMovingCursorOption(value),
+          (value) => controller.setMovingCursorOption(value)
         );
         applySelectSetting(
           "ctrl_enter_option",
           settings.ctrl_enter_option,
-          (value) => controller.setCtrlEnterOption(value),
+          (value) => controller.setCtrlEnterOption(value)
         );
 
         if (settings.select_phrase === "before_cursor") {
@@ -884,22 +959,35 @@ if (typeof document !== "undefined") {
         applyCheckboxSetting(
           "esc_key",
           settings.esc_key_clear_entire_buffer,
-          (checked) => controller.setEscClearEntireBuffer(checked),
+          (checked) => controller.setEscClearEntireBuffer(checked)
         );
         applyCheckboxSetting(
           "allow_change_prior_tone",
           settings.allow_changing_prior_tone,
-          (checked) => controller.setAllowChangingPriorTone(checked),
+          (checked) => controller.setAllowChangingPriorTone(checked)
         );
+        applyCheckboxSetting(
+          "prefer_longer_phrases",
+          settings.prefer_longer_phrases,
+          (checked) => {
+            controller.setPreferLongerPhrases(checked);
+            service.service.setPreferLongerPhrases(checked);
+          }
+        );
+        applyCheckboxSetting(
+          "graph_prefer_longer_phrases",
+          settings.prefer_longer_phrases,
+          (checked) => {}
+        );
+
         applyCheckboxSetting(
           "repeated_punctuation_choose_candidate",
           settings.repeated_punctuation_choose_candidate,
-          (checked) =>
-            controller.setRepeatedPunctuationChooseCandidate(checked),
+          (checked) => controller.setRepeatedPunctuationChooseCandidate(checked)
         );
         applyCheckboxSetting("beep_on_error", settings.beep_on_error);
         applyCheckboxSetting("move_cursor", settings.move_cursor, (checked) =>
-          controller.setMoveCursorAfterSelection(checked),
+          controller.setMoveCursorAfterSelection(checked)
         );
 
         if (settings.bopomofo_font_annotation_support_enabled) {
@@ -911,14 +999,14 @@ if (typeof document !== "undefined") {
           "bopomofo_font_annotation_support_enabled",
           settings.bopomofo_font_annotation_support_enabled,
           (checked) =>
-            controller.setBopomofoFontAnnotationSupportEnabled(checked),
+            controller.setBopomofoFontAnnotationSupportEnabled(checked)
         );
 
         applyTogglePair(
           settings.letter_mode === "upper",
           "uppercase_letters",
           "lowercase_letters",
-          (isUpper) => controller.setLetterMode(isUpper ? "upper" : "lower"),
+          (isUpper) => controller.setLetterMode(isUpper ? "upper" : "lower")
         );
       };
 
@@ -1075,7 +1163,7 @@ if (typeof document !== "undefined") {
         const handled = controller.simpleKeyboardEvent(
           button,
           api.isShift || api.isLock,
-          api.isCtrl,
+          api.isCtrl
         );
         focusElement("text_area");
 
@@ -1202,7 +1290,14 @@ if (typeof document !== "undefined") {
           return;
         }
 
+        const keyhandleTime = $("keyhandle_time");
+        const startedAt = performance.now();
         const accepted = controller.keyEvent(event);
+        if (keyhandleTime) {
+          keyhandleTime.textContent = `${(performance.now() - startedAt).toFixed(
+            2
+          )} ms`;
+        }
         if (accepted) {
           event.preventDefault();
         }
@@ -1255,12 +1350,27 @@ if (typeof document !== "undefined") {
         controller.setKeyboardLayout(value);
         settingsManager.settings.layout = value;
         settingsManager.saveSettings();
+        setSelectValue("graph_layout", value);
         screenKeyboard.loadLayout();
         focusElement("text_area");
       };
 
       $("layout").onblur = (event) => {
         focusElement("text_area");
+      };
+
+      $("graph_layout").onchange = (event) => {
+        const value = getValue("graph_layout");
+        controller.setKeyboardLayout(value);
+        settingsManager.settings.layout = value;
+        settingsManager.saveSettings();
+        setSelectValue("layout", value);
+        screenKeyboard.loadLayout();
+        focusElement("feature_graph_text_area");
+      };
+
+      $("graph_layout").onblur = (event) => {
+        focusElement("feature_graph_text_area");
       };
 
       $("keys").onchange = (event) => {
@@ -1321,6 +1431,26 @@ if (typeof document !== "undefined") {
         const checked = getChecked("allow_change_prior_tone");
         controller.setAllowChangingPriorTone(checked);
         settingsManager.settings.allow_changing_prior_tone = checked;
+        settingsManager.saveSettings();
+        focusElement("text_area");
+      };
+
+      $("prefer_longer_phrases").onchange = (event) => {
+        const checked = getChecked("prefer_longer_phrases");
+        controller.setPreferLongerPhrases(checked);
+        service.service.setPreferLongerPhrases(checked);
+        $("graph_prefer_longer_phrases").checked = checked;
+        settingsManager.settings.prefer_longer_phrases = checked;
+        settingsManager.saveSettings();
+        focusElement("text_area");
+      };
+
+      $("graph_prefer_longer_phrases").onchange = (event) => {
+        const checked = getChecked("graph_prefer_longer_phrases");
+        controller.setPreferLongerPhrases(checked);
+        service.service.setPreferLongerPhrases(checked);
+        $("prefer_longer_phrases").checked = checked;
+        settingsManager.settings.prefer_longer_phrases = checked;
         settingsManager.saveSettings();
         focusElement("text_area");
       };
@@ -1451,7 +1581,7 @@ if (typeof document !== "undefined") {
         }
         console.log("Toggling feature:", id);
         setDisplay(id, "flex");
-        
+
         if (typeof gtag === "function") {
           gtag("event", "screen_view", {
             screen_name: id,
@@ -1535,31 +1665,13 @@ if (typeof document !== "undefined") {
           // Kept separate from lastValue so a selection range is replaced, not preserved.
           let lastAfter = "";
 
-          function getActiveLayout() {
-            const { BopomofoKeyboardLayout } = window.mcbopomofo;
-            const name = settingsManager.settings.layout || "Standard";
-            switch (name) {
-              case "Standard":
-                return BopomofoKeyboardLayout.StandardLayout;
-              case "ETen":
-                return BopomofoKeyboardLayout.ETenLayout;
-              case "Hsu":
-                return BopomofoKeyboardLayout.HsuLayout;
-              case "ETen26":
-                return BopomofoKeyboardLayout.ETen26Layout;
-              case "HanyuPinyin":
-                return BopomofoKeyboardLayout.HanyuPinyinLayout;
-              case "IBM":
-                return BopomofoKeyboardLayout.IBMLayout;
-              default:
-                return BopomofoKeyboardLayout.StandardLayout;
-            }
-          }
-
           function getGraphReadingBuffer() {
             const { BopomofoReadingBuffer } = window.mcbopomofo;
             const layout = getActiveLayout();
-            if (!graphReadingBuffer || graphReadingBuffer.keyboardLayout !== layout) {
+            if (
+              !graphReadingBuffer ||
+              graphReadingBuffer.keyboardLayout !== layout
+            ) {
               graphReadingBuffer = new BopomofoReadingBuffer(layout);
             }
             return graphReadingBuffer;
@@ -1601,7 +1713,11 @@ if (typeof document !== "undefined") {
           });
 
           textarea.addEventListener("keydown", (event) => {
-            if (isGraphComposing || event.isComposing || event.keyCode === 229) {
+            if (
+              isGraphComposing ||
+              event.isComposing ||
+              event.keyCode === 229
+            ) {
               return;
             }
 
@@ -1730,21 +1846,25 @@ if (typeof document !== "undefined") {
         }
         function initMermaid() {
           if (typeof mermaid === "undefined") return;
-          const isDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+          const isDark =
+            window.matchMedia &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches;
           mermaid.initialize({
             startOnLoad: false,
-            theme: isDark ? "dark" : "default"
+            theme: isDark ? "dark" : "default",
           });
         }
         initMermaid();
         if (window.matchMedia) {
-          window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
-            initMermaid();
-            // Redraw only when the graph tab is visible so we don't waste work.
-            if (window.location.hash === "#feature_graph") {
-              service.drawGraph();
-            }
-          });
+          window
+            .matchMedia("(prefers-color-scheme: dark)")
+            .addEventListener("change", () => {
+              initMermaid();
+              // Redraw only when the graph tab is visible so we don't waste work.
+              if (window.location.hash === "#feature_graph") {
+                service.drawGraph();
+              }
+            });
         }
         syntaxHighlightManager.init();
         onHashChange({ focus: false });
